@@ -1,0 +1,903 @@
+<!doctype html>
+<html lang="en">
+
+<head>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="preconnect" href="https://fonts.gstatic.com">
+    <link href="https://fonts.googleapis.com/css2?family=Tangerine&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Dancing+Script:wght@400;700&display=swap" rel="stylesheet">
+    <title>Soft Blues</title>
+    <style>
+        .container {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            margin-top: 20px;
+        }
+
+        .image-carousel {
+            display: flex;
+            overflow: hidden;
+            justify-content: center;
+            margin-bottom: 20px;
+            gap: 20px;
+            /* Add some space between images */
+        }
+
+        .image-carousel img {
+            width: 150px;
+            /* Set the desired width for the images */
+            height: 300px;
+            /* Set the desired height for the images */
+            object-fit: cover;
+            /* Ensure the images cover the area without distortion */
+            transition: transform 0.5s ease, filter 0.5s ease;
+            border-radius: 10px;
+            /* Maintain rounded corners */
+        }
+
+        .image-carousel img.active {
+            transform: scale(1.1);
+            filter: blur(0);
+            border-radius: 10px;
+            /* Ensure rounded corners are applied when scaled */
+        }
+
+        .image-carousel img:not(.active) {
+            filter: blur(1px);
+        }
+
+        .text-container {
+            text-align: center;
+            color: white;
+            max-width: 600px;
+            margin-top: 20px;
+            /* Add gap between the header and the main text */
+        }
+
+        .title-font {
+            font-size: 2rem;
+            /* Adjust the font size of the header */
+            margin-bottom: 20px;
+            /* Add space below the header */
+            font-family: 'Tangerine', cursive;
+        }
+
+        .text-font {
+            font-family: 'Dancing Script', cursive;
+
+        }
+
+        .header-content {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            width: 100%;
+        }
+
+        .dropdown {
+            position: relative;
+            display: inline-block;
+        }
+
+        .dropdown a {
+            margin-top: -4px;
+        }
+
+
+        .dropdown-content {
+            display: none;
+            position: absolute;
+            background-color: white;
+            min-width: 160px;
+            box-shadow: 0px 8px 16px 0px rgba(168, 169, 221, 0.2);
+            z-index: 1;
+        }
+
+        .dropdown-content a {
+            color: black;
+            padding: 12px 16px;
+            text-decoration: none;
+            display: block;
+        }
+
+        .dropdown-content a:hover {
+            background-color: #f1f1f1;
+        }
+
+        .show {
+            display: block;
+        }
+
+        .popup-overlay {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.5);
+            z-index: 1000;
+        }
+
+       
+        .popup-content {
+            position: fixed;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            background-color: rgb(35, 36, 43);
+            padding: 20px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+            z-index: 1001;
+        }
+
+        .popup-content table {  
+            width: 100%;
+            border-collapse: collapse;
+        }
+
+        .popup-content table,
+        th,
+        td {
+            border: 1px solid rgb(235, 236, 252);
+        }
+
+        .popup-content th,
+        .popup-content td {
+            padding: 8px;
+            text-align: left;
+        }
+
+        .close-btn {
+            background-color: rgb(235, 236, 252);
+            color:rgb(35, 36, 43);
+            border: none;
+            padding: 5px 10px;
+            cursor: pointer;
+            float: right;
+        }
+
+        .collection-title {
+            font-family: 'Tangerine', cursive;
+            font-size: 10rem;
+            color: #ffffff;
+            text-align: center;
+            margin-top: 30px;
+            margin-bottom: 10px;
+        }
+    </style>
+</head>
+
+<body>
+    <header class="text-gray-800 body-font bg-gray-200">
+        <div class="container mx-auto flex flex-wrap p-5 flex-col md:flex-row items-center">
+            <div class="header-content">
+                <a class="flex title-font font-medium items-center text-gray-900 mb-4 md:mb-0">
+                    <img alt="blog" src="rue.jpg" class="w-20 h-20 rounded-full flex-shrink-0 object-cover object-center" style="border-radius: 50%;">
+                    <span class="ml-3 text-4xl">Soft Blues</span>
+                </a>
+                <nav class="md:ml-auto md:mr-auto flex flex-wrap items-center text-base justify-center">
+                    <a class="mr-5 hover:text-gray-900 title-font">About</a>
+                    <div class="dropdown">
+                        <a class="mr-5 hover:text-gray-900 title-font" onclick="toggleDropdown()">Products</a>
+                        <div id="dropdown-content" class="dropdown-content text-font">
+                            <a href="#">Bracelets</a>
+                            <a href="#">Necklaces</a>
+                            <a href="#">Earrings</a>
+                            <a href="#">Rings</a>
+                        </div>
+                    </div>
+                    <a class="mr-5 hover:text-gray-900 title-font">Customer Service</a>
+                </nav>
+                <a href="payment.html"
+                    class="inline-flex items-center bg-gray-100 border-0 py-1 px-3 focus:outline-none hover:bg-gray-200 rounded text-base mt-4 md:mt-0 ml-3 text-font">
+                    Checkout
+                    <svg fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"
+                        stroke-width="2" class="w-4 h-4 ml-1" viewBox="0 0 24 24">
+                        <path d="M5 12h14M12 5l7 7-7 7"></path>
+                    </svg>
+                </a>
+
+            </div>
+        </div>
+    </header>
+
+    <script>
+        function toggleDropdown() {
+            document.getElementById("dropdown-content").classList.toggle("show");
+        }
+        window.onclick = function (event) {
+            if (!event.target.matches('.dropdown a')) {
+                var dropdowns = document.getElementsByClassName("dropdown-content");
+                for (var i = 0; i < dropdowns.length; i++) {
+                    var openDropdown = dropdowns[i];
+                    if (openDropdown.classList.contains('show')) {
+                        openDropdown.classList.remove('show');
+                    }
+                }
+            }
+        }
+    </script>
+</body>
+
+
+<section class="text-gray-400 bg-gray-900 body-font">
+    <div class="container">
+
+        <div class="text-container">
+            <h1 class="title-font sm:text-4xl text-3xl mb-4 font-medium text-white">Soft Blues</h1>
+            <p class="text-font mb-8 leading-relaxed">
+                Welcome to Soft Blues, your destination for unique and rare jewelry. Our collection features handpicked,
+                vintage pieces themed around soft blue hues, showcasing exquisite gemstones like aquamarine, blue
+                sapphire, and opal. Discover elegant rings, necklaces, bracelets, and earrings that
+                blend timeless sophistication with rarity, perfect for those who appreciate individuality and
+                craftsmanship. Let Soft Blues's captivating jewelry add a touch of elegance and history to
+                your collection.
+            </p>
+        </div>
+        <div class="image-carousel">
+            <img class="object-cover object-center rounded" src="img30.jpg">
+            <img class="object-cover object-center rounded" src="cc1.jpg">
+            <img class="object-cover object-center rounded" src="img32.jpg">
+            <img class="object-cover object-center rounded" src="cc14.jpg">
+            <img class="object-cover object-center rounded" src="cc15.jpg">
+            <img class="object-cover object-center rounded" src="img35.jpg">
+            <img class="object-cover object-center rounded" src="cc8.jpg">
+        </div>
+        <h3 class="collection-title title-font" style="font-weight: 200;">Collection</h3>
+    </div>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            const carousels = document.querySelectorAll('.image-carousel');
+            carousels.forEach(carousel => {
+                const images = carousel.querySelectorAll('img');
+                let index = 0;
+
+                function changeImage() {
+                    images.forEach(img => img.classList.remove('active'));
+                    images[index].classList.add('active');
+                    index = (index + 1) % images.length;
+                }
+
+                changeImage(); // Initialize first active image
+                setInterval(changeImage, 2000); // Change image every 2 seconds
+            });
+        });
+
+
+    </script>
+
+
+
+    <section class="text-gray-400 body-font bg-gray-900">
+        <div class="container px-5 py-24 mx-auto">
+            <div class="flex flex-wrap w-full mb-20">
+            </div>
+            <div class="flex flex-wrap -m-4">
+                <div class="xl:w-1/4 md:w-1/2 p-4">
+                    <div class="bg-gray-800 bg-opacity-40 p-6 rounded-lg">
+                        <img class="h-40 rounded w-full object-cover object-center mb-6" src="img2.jpg" alt="content">
+                        <h3 class="tracking-widest text-indigo-400 text-m font-medium text-font">280$</h3>
+                        <h2 class="text-lg text-white font-medium text-font mb-4">Neptune
+                            <button
+                                class="heart-btn  rounded-full w-10 h-10 bg-gray-800 p-0 border-0 inline-flex items-center justify-center text-blue-200 ml-13"
+                                onclick="toggleHeartColor(this)">
+                                <svg fill="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                    class="w-5 h-5" viewBox="0 0 24 24">
+                                    <path
+                                        d="M20.84 4.61a5.5 5.5 0 00-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 00-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 000-7.78z">
+                                    </path>
+                                </svg>
+                            </button>
+                        </h2>
+                        <p class="leading-relaxed text-base text-font">Delicate and enchanting, Neptune softly graces
+                            your neckline, bringing a touch of tranquility and elegance to any outfit.</p>
+                    </div>
+                </div>
+                <div class="xl:w-1/4 md:w-1/2 p-4">
+                    <div class="bg-gray-800 bg-opacity-40 p-6 rounded-lg">
+                        <img class="h-40 rounded w-full object-cover object-center mb-6" src="img1.jpg" alt="content">
+                        <h3 class="tracking-widest text-indigo-400 text-m font-medium text-font">210$</h3>
+                        <h2 class="text-lg text-white font-medium text-font mb-4">Ocean
+                            <button
+                                class="heart-btn rounded-full w-10 h-10 bg-gray-800 p-0 border-0 inline-flex items-center justify-center text-blue-200 ml-13"
+                                onclick="toggleHeartColor(this)">
+                                <svg fill="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                    class="w-5 h-5" viewBox="0 0 24 24">
+                                    <path
+                                        d="M20.84 4.61a5.5 5.5 0 00-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 00-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 000-7.78z">
+                                    </path>
+                                </svg>
+                            </button>
+                        </h2>
+                        <p class="leading-relaxed text-base text-font">Delicate and enchanting, Ocean softly graces your
+                            neckline, bringing a touch of tranquility and elegance to any outfit.</p>
+                    </div>
+                </div>
+                <div class="xl:w-1/4 md:w-1/2 p-4">
+                    <div class="bg-gray-800 bg-opacity-40 p-6 rounded-lg">
+                        <img class="h-40 rounded w-full object-cover object-center mb-6" src="img17.jpg" alt="content">
+                        <h3 class="tracking-widest text-indigo-400 text-m font-medium text-font">100$</h3>
+                        <h2 class="text-lg text-white font-medium text-font mb-4"> Heart
+                            <button
+                                class="heart-btn  rounded-full w-10 h-10 bg-gray-800 p-0 border-0 inline-flex items-center justify-center text-blue-200 ml-13"
+                                onclick="toggleHeartColor(this)">
+                                <svg fill="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                    class="w-5 h-5" viewBox="0 0 24 24">
+                                    <path
+                                        d="M20.84 4.61a5.5 5.5 0 00-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 00-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 000-7.78z">
+                                    </path>
+                                </svg>
+                            </button>
+                        </h2>
+                        <p class="leading-relaxed text-base text-font">Delicate and enchanting, Heart softly graces your
+                            ears, bringing a touch of tranquility and elegance to any outfit.</p>
+                    </div>
+                </div>
+                <div class="xl:w-1/4 md:w-1/2 p-4">
+                    <div class="bg-gray-800 bg-opacity-40 p-6 rounded-lg">
+                        <img class="h-40 rounded w-full object-cover object-center mb-6" src="img16.jpg" alt="content">
+                        <h3 class="tracking-widest text-indigo-400 text-m font-medium text-font">300$</h3>
+                        <h2 class="text-lg text-white font-medium text-font mb-4"> Souvenier
+                            <button
+                                class="heart-btn  rounded-full w-10 h-10 bg-gray-800 p-0 border-0 inline-flex items-center justify-center text-blue-200 ml-13"
+                                onclick="toggleHeartColor(this)">
+                                <svg fill="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                    class="w-5 h-5" viewBox="0 0 24 24">
+                                    <path
+                                        d="M20.84 4.61a5.5 5.5 0 00-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 00-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 000-7.78z">
+                                    </path>
+                                </svg>
+                            </button>
+                        </h2>
+                        <p class="leading-relaxed text-base text-font">Delicate and enchanting, Souve softly graces your
+                            neckline, bringing a touch of tranquility and elegance to any outfit.</p>
+                    </div>
+                </div>
+                <script>
+                    function toggleHeartColor(btn) {
+                        // Check if the button currently has the class for blue color
+                        const isBlue = btn.classList.contains('text-blue-200');
+
+                        // Toggle between blue and red classes based on current state
+                        if (isBlue) {
+                            btn.classList.remove('text-blue-200');
+                            btn.classList.add('text-red-500');
+                        } else {
+                            btn.classList.remove('text-red-500');
+                            btn.classList.add('text-blue-200');
+                        }
+                    }
+                </script>
+
+                <div class="xl:w-1/4 md:w-1/2 p-4">
+                    <div class="bg-gray-800 bg-opacity-40 p-6 rounded-lg">
+                        <img class="h-40 rounded w-full object-cover object-center mb-6" src="img15.jpg" alt="content">
+                        <h3 class="tracking-widest text-indigo-400 text-m font-medium text-font">310$</h3>
+                        <h2 class="text-lg text-white font-medium text-font mb-4">Wings
+                            <button
+                                class="heart-btn  rounded-full w-10 h-10 bg-gray-800 p-0 border-0 inline-flex items-center justify-center text-blue-200 ml-13"
+                                onclick="toggleHeartColor(this)">
+                                <svg fill="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                    class="w-5 h-5" viewBox="0 0 24 24">
+                                    <path
+                                        d="M20.84 4.61a5.5 5.5 0 00-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 00-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 000-7.78z">
+                                    </path>
+                                </svg>
+                            </button>
+                        </h2>
+                        <p class="leading-relaxed text-base text-font">Delicate and enchanting, Wings softly graces
+                            your neckline, bringing a touch of tranquility and elegance to any outfit.</p>
+                    </div>
+                </div>
+                <div class="xl:w-1/4 md:w-1/2 p-4">
+                    <div class="bg-gray-800 bg-opacity-40 p-6 rounded-lg">
+                        <img class="h-40 rounded w-full object-cover object-center mb-6" src="img14.jpg" alt="content">
+                        <h3 class="tracking-widest text-indigo-400 text-m font-medium text-font">360$</h3>
+                        <h2 class="text-lg text-white font-medium text-font mb-4">Sage
+                            <button
+                                class="heart-btn  rounded-full w-10 h-10 bg-gray-800 p-0 border-0 inline-flex items-center justify-center text-blue-200 ml-13"
+                                onclick="toggleHeartColor(this)">
+                                <svg fill="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                    class="w-5 h-5" viewBox="0 0 24 24">
+                                    <path
+                                        d="M20.84 4.61a5.5 5.5 0 00-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 00-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 000-7.78z">
+                                    </path>
+                                </svg>
+                            </button>
+                        </h2>
+                        <p class="leading-relaxed text-base text-font">Delicate and enchanting, Sage softly graces
+                            your neckline, bringing a touch of tranquility and elegance to any outfit.</p>
+                    </div>
+                </div>
+                <div class="xl:w-1/4 md:w-1/2 p-4">
+                    <div class="bg-gray-800 bg-opacity-40 p-6 rounded-lg">
+                        <img class="h-40 rounded w-full object-cover object-center mb-6" src="img13.jpg" alt="content">
+                        <h3 class="tracking-widest text-indigo-400 text-m font-medium text-font">275$</h3>
+                        <h2 class="text-lg text-white font-medium text-font mb-4">Hue
+                            <button
+                                class="heart-btn  rounded-full w-10 h-10 bg-gray-800 p-0 border-0 inline-flex items-center justify-center text-blue-200 ml-13"
+                                onclick="toggleHeartColor(this)">
+                                <svg fill="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                    class="w-5 h-5" viewBox="0 0 24 24">
+                                    <path
+                                        d="M20.84 4.61a5.5 5.5 0 00-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 00-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 000-7.78z">
+                                    </path>
+                                </svg>
+                            </button>
+                        </h2>
+                        <p class="leading-relaxed text-base text-font">Delicate and enchanting, Hue softly graces
+                            your neckline, bringing a touch of tranquility and elegance to any outfit.</p>
+                    </div>
+                </div>
+                <div class="xl:w-1/4 md:w-1/2 p-4">
+                    <div class="bg-gray-800 bg-opacity-40 p-6 rounded-lg">
+                        <img class="h-40 rounded w-full object-cover object-center mb-6" src="img12.jpg" alt="content">
+                        <h3 class="tracking-widest text-indigo-400 text-m font-medium text-font">100$</h3>
+                        <h2 class="text-lg text-white font-medium text-font mb-4">Shell
+                            <button
+                                class="heart-btn  rounded-full w-10 h-10 bg-gray-800 p-0 border-0 inline-flex items-center justify-center text-blue-200 ml-13"
+                                onclick="toggleHeartColor(this)">
+                                <svg fill="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                    class="w-5 h-5" viewBox="0 0 24 24">
+                                    <path
+                                        d="M20.84 4.61a5.5 5.5 0 00-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 00-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 000-7.78z">
+                                    </path>
+                                </svg>
+                            </button>
+                        </h2>
+                        <p class="leading-relaxed text-base text-font">Delicate and enchanting, Shell softly graces
+                            your neckline, bringing a touch of tranquility and elegance to any outfit.</p>
+                    </div>
+                </div>
+                <div class="xl:w-1/4 md:w-1/2 p-4">
+                    <div class="bg-gray-800 bg-opacity-40 p-6 rounded-lg">
+                        <img class="h-40 rounded w-full object-cover object-center mb-6" src="img11.jpg" alt="content">
+                        <h3 class="tracking-widest text-indigo-400 text-m font-medium text-font"> 400$</h3>
+                        <h2 class="text-lg text-white font-medium text-font mb-4">Daisy
+                            <button
+                                class="heart-btn  rounded-full w-10 h-10 bg-gray-800 p-0 border-0 inline-flex items-center justify-center text-blue-200 ml-13"
+                                onclick="toggleHeartColor(this)">
+                                <svg fill="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                    class="w-5 h-5" viewBox="0 0 24 24">
+                                    <path
+                                        d="M20.84 4.61a5.5 5.5 0 00-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 00-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 000-7.78z">
+                                    </path>
+                                </svg>
+                            </button>
+                        </h2>
+                        <p class="leading-relaxed text-base text-font">Delicate and enchanting, Daisy softly graces
+                            your neckline, bringing a touch of tranquility and elegance to any outfit.</p>
+                    </div>
+                </div>
+                <div class="xl:w-1/4 md:w-1/2 p-4">
+                    <div class="bg-gray-800 bg-opacity-40 p-6 rounded-lg">
+                        <img class="h-40 rounded w-full object-cover object-center mb-6" src="img10.jpg" alt="content">
+                        <h3 class="tracking-widest text-indigo-400 text-m font-medium text-font">200$</h3>
+                        <h2 class="text-lg text-white font-medium text-font mb-4">Grace
+                            <button
+                                class="heart-btn  rounded-full w-10 h-10 bg-gray-800 p-0 border-0 inline-flex items-center justify-center text-blue-200 ml-13"
+                                onclick="toggleHeartColor(this)">
+                                <svg fill="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                    class="w-5 h-5" viewBox="0 0 24 24">
+                                    <path
+                                        d="M20.84 4.61a5.5 5.5 0 00-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 00-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 000-7.78z">
+                                    </path>
+                                </svg>
+                            </button>
+                        </h2>
+                        <p class="leading-relaxed text-base text-font">Delicate and enchanting, neptune softly graces
+                            your neckline, bringing a touch of tranquility and elegance to any outfit.</p>
+                    </div>
+                </div>
+                <div class="xl:w-1/4 md:w-1/2 p-4">
+                    <div class="bg-gray-800 bg-opacity-40 p-6 rounded-lg">
+                        <img class="h-40 rounded w-full object-cover object-center mb-6" src="img9.jpg" alt="content">
+                        <h3 class="tracking-widest text-indigo-400 text-m font-medium text-font">280$</h3>
+                        <h2 class="text-lg text-white font-medium text-font mb-4">Muave
+                            <button
+                                class="heart-btn  rounded-full w-10 h-10 bg-gray-800 p-0 border-0 inline-flex items-center justify-center text-blue-200 ml-13"
+                                onclick="toggleHeartColor(this)">
+                                <svg fill="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                    class="w-5 h-5" viewBox="0 0 24 24">
+                                    <path
+                                        d="M20.84 4.61a5.5 5.5 0 00-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 00-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 000-7.78z">
+                                    </path>
+                                </svg>
+                            </button>
+                        </h2>
+                        <p class="leading-relaxed text-base text-font">Delicate and enchanting, neptune softly graces
+                            your neckline, bringing a touch of tranquility and elegance to any outfit.</p>
+                    </div>
+                </div>
+                <div class="xl:w-1/4 md:w-1/2 p-4">
+                    <div class="bg-gray-800 bg-opacity-40 p-6 rounded-lg">
+                        <img class="h-40 rounded w-full object-cover object-center mb-6" src="img8.jpg" alt="content">
+                        <h3 class="tracking-widest text-indigo-400 text-m font-medium text-font">120$</h3>
+                        <h2 class="text-lg text-white font-medium text-font mb-4">Felicity
+                            <button
+                                class="heart-btn  rounded-full w-10 h-10 bg-gray-800 p-0 border-0 inline-flex items-center justify-center text-blue-200 ml-13"
+                                onclick="toggleHeartColor(this)">
+                                <svg fill="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                    class="w-5 h-5" viewBox="0 0 24 24">
+                                    <path
+                                        d="M20.84 4.61a5.5 5.5 0 00-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 00-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 000-7.78z">
+                                    </path>
+                                </svg>
+                            </button>
+                        </h2>
+                        <p class="leading-relaxed text-base text-font">Delicate and enchanting, neptune softly graces
+                            your neckline, bringing a touch of tranquility and elegance to any outfit.</p>
+                    </div>
+                </div>
+                <div class="xl:w-1/4 md:w-1/2 p-4">
+                    <div class="bg-gray-800 bg-opacity-40 p-6 rounded-lg">
+                        <img class="h-40 rounded w-full object-cover object-center mb-6" src="img7.jpg" alt="content">
+                        <h3 class="tracking-widest text-indigo-400 text-m font-medium text-font">300$</h3>
+                        <h2 class="text-lg text-white font-medium text-font mb-4">Ray
+                            <button
+                                class="heart-btn  rounded-full w-10 h-10 bg-gray-800 p-0 border-0 inline-flex items-center justify-center text-blue-200 ml-13"
+                                onclick="toggleHeartColor(this)">
+                                <svg fill="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                    class="w-5 h-5" viewBox="0 0 24 24">
+                                    <path
+                                        d="M20.84 4.61a5.5 5.5 0 00-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 00-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 000-7.78z">
+                                    </path>
+                                </svg>
+                            </button>
+                        </h2>
+                        <p class="leading-relaxed text-base text-font">Delicate and enchanting, neptune softly graces
+                            your neckline, bringing a touch of tranquility and elegance to any outfit.</p>
+                    </div>
+                </div>
+                <div class="xl:w-1/4 md:w-1/2 p-4">
+                    <div class="bg-gray-800 bg-opacity-40 p-6 rounded-lg">
+                        <img class="h-40 rounded w-full object-cover object-center mb-6" src="img6.jpg" alt="content">
+                        <h3 class="tracking-widest text-indigo-400 text-m font-medium text-font">450$</h3>
+                        <h2 class="text-lg text-white font-medium text-font mb-4">Depth
+                            <button
+                                class="heart-btn  rounded-full w-10 h-10 bg-gray-800 p-0 border-0 inline-flex items-center justify-center text-blue-200 ml-13"
+                                onclick="toggleHeartColor(this)">
+                                <svg fill="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                    class="w-5 h-5" viewBox="0 0 24 24">
+                                    <path
+                                        d="M20.84 4.61a5.5 5.5 0 00-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 00-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 000-7.78z">
+                                    </path>
+                                </svg>
+                            </button>
+                        </h2>
+                        <p class="leading-relaxed text-base text-font">Delicate and enchanting, neptune softly graces
+                            your neckline, bringing a touch of tranquility and elegance to any outfit.</p>
+                    </div>
+                </div>
+                <div class="xl:w-1/4 md:w-1/2 p-4">
+                    <div class="bg-gray-800 bg-opacity-40 p-6 rounded-lg">
+                        <img class="h-40 rounded w-full object-cover object-center mb-6" src="img22.jpg" alt="content">
+                        <h3 class="tracking-widest text-indigo-400 text-m font-medium text-font">500$</h3>
+                        <h2 class="text-lg text-white font-medium text-font mb-4">Sprinkles
+                            <button
+                                class="heart-btn  rounded-full w-10 h-10 bg-gray-800 p-0 border-0 inline-flex items-center justify-center text-blue-200 ml-13"
+                                onclick="toggleHeartColor(this)">
+                                <svg fill="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                    class="w-5 h-5" viewBox="0 0 24 24">
+                                    <path
+                                        d="M20.84 4.61a5.5 5.5 0 00-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 00-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 000-7.78z">
+                                    </path>
+                                </svg>
+                            </button>
+                        </h2>
+                        <p class="leading-relaxed text-base text-font">Delicate and enchanting, neptune softly graces
+                            your neckline, bringing a touch of tranquility and elegance to any outfit.</p>
+                    </div>
+                </div>
+                <div class="xl:w-1/4 md:w-1/2 p-4">
+                    <div class="bg-gray-800 bg-opacity-40 p-6 rounded-lg">
+                        <img class="h-40 rounded w-full object-cover object-center mb-6" src="img5.jpg" alt="content">
+                        <h3 class="tracking-widest text-indigo-400 text-m font-medium text-font">500$</h3>
+                        <h2 class="text-lg text-white font-medium text-font mb-4">Furby
+                            <button
+                                class="heart-btn  rounded-full w-10 h-10 bg-gray-800 p-0 border-0 inline-flex items-center justify-center text-blue-200 ml-13"
+                                onclick="toggleHeartColor(this)">
+                                <svg fill="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                    class="w-5 h-5" viewBox="0 0 24 24">
+                                    <path
+                                        d="M20.84 4.61a5.5 5.5 0 00-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 00-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 000-7.78z">
+                                    </path>
+                                </svg>
+                            </button>
+                        </h2>
+                        <p class="leading-relaxed text-base text-font">Delicate and enchanting, neptune softly graces
+                            your neckline, bringing a touch of tranquility and elegance to any outfit.</p>
+                    </div>
+                </div>
+                <div class="xl:w-1/4 md:w-1/2 p-4">
+                    <div class="bg-gray-800 bg-opacity-40 p-6 rounded-lg">
+                        <img class="h-40 rounded w-full object-cover object-center mb-6" src="img19.jpg" alt="content">
+                        <h3 class="tracking-widest text-indigo-400 text-m font-medium text-font">600$</h3>
+                        <h2 class="text-lg text-white font-medium text-font mb-4">Rue
+                            <button
+                                class="heart-btn  rounded-full w-10 h-10 bg-gray-800 p-0 border-0 inline-flex items-center justify-center text-blue-200 ml-13"
+                                onclick="toggleHeartColor(this)">
+                                <svg fill="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                    class="w-5 h-5" viewBox="0 0 24 24">
+                                    <path
+                                        d="M20.84 4.61a5.5 5.5 0 00-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 00-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 000-7.78z">
+                                    </path>
+                                </svg>
+                            </button>
+                        </h2>
+                        <p class="leading-relaxed text-base text-font">Delicate and enchanting, Rue softly graces your
+                            neckline, bringing a touch of tranquility and elegance to any outfit.</p>
+                    </div>
+                </div>
+                <div class="xl:w-1/4 md:w-1/2 p-4">
+                    <div class="bg-gray-800 bg-opacity-40 p-6 rounded-lg">
+                        <img class="h-40 rounded w-full object-cover object-center mb-6" src="img21.jpg" alt="content">
+                        <h3 class="tracking-widest text-indigo-400 text-m font-medium text-font">500$</h3>
+                        <h2 class="text-lg text-white font-medium text-font mb-4">Jasmine
+                            <button
+                                class="heart-btn  rounded-full w-10 h-10 bg-gray-800 p-0 border-0 inline-flex items-center justify-center text-blue-200 ml-13"
+                                onclick="toggleHeartColor(this)">
+                                <svg fill="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                    class="w-5 h-5" viewBox="0 0 24 24">
+                                    <path
+                                        d="M20.84 4.61a5.5 5.5 0 00-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 00-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 000-7.78z">
+                                    </path>
+                                </svg>
+                            </button>
+                        </h2>
+                        <p class="leading-relaxed text-base text-font">Delicate and enchanting, neptune softly graces
+                            your neckline, bringing a touch of tranquility and elegance to any outfit.</p>
+                    </div>
+                </div>
+
+                <div class="xl:w-1/4 md:w-1/2 p-4">
+                    <div class="bg-gray-800 bg-opacity-40 p-6 rounded-lg">
+                        <img class="h-40 rounded w-full object-cover object-center mb-6" src="img3.jpg" alt="content">
+                        <h3 class="tracking-widest text-indigo-400 text-m font-medium text-font">300$</h3>
+                        <h2 class="text-lg text-white font-medium text-font mb-4">Adeline
+                            <button
+                                class="heart-btn  rounded-full w-10 h-10 bg-gray-800 p-0 border-0 inline-flex items-center justify-center text-blue-200 ml-13"
+                                onclick="toggleHeartColor(this)">
+                                <svg fill="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                    class="w-5 h-5" viewBox="0 0 24 24">
+                                    <path
+                                        d="M20.84 4.61a5.5 5.5 0 00-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 00-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 000-7.78z">
+                                    </path>
+                                </svg>
+                            </button>
+                        </h2>
+                        <p class="leading-relaxed text-base text-font">Delicate and enchanting, neptune softly graces
+                            your neckline, bringing a touch of tranquility and elegance to any outfit.</p>
+                    </div>
+                </div>
+                <div class="xl:w-1/4 md:w-1/2 p-4">
+                    <div class="bg-gray-800 bg-opacity-40 p-6 rounded-lg">
+                        <img class="h-40 rounded w-full object-cover object-center mb-6" src="img4.jpg" alt="content">
+                        <h3 class="tracking-widest text-indigo-400 text-m font-medium text-font">400$
+
+                        </h3>
+                        <h2 class="text-lg text-white font-medium text-font mb-4">Sydney
+                            <button
+                                class="heart-btn  rounded-full w-10 h-10 bg-gray-800 p-0 border-0 inline-flex items-center justify-center text-blue-200 ml-13"
+                                onclick="toggleHeartColor(this)">
+                                <svg fill="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                    class="w-5 h-5" viewBox="0 0 24 24">
+                                    <path
+                                        d="M20.84 4.61a5.5 5.5 0 00-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 00-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 000-7.78z">
+                                    </path>
+                                </svg>
+                            </button>
+                        </h2>
+
+                        <p class="leading-relaxed text-base text-font">Delicate and enchanting, Sydney softly graces
+                            your wrist, bringing a touch of tranquility and elegance to any outfit.</p>
+                    </div>
+                    <div class="flex">
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+    <footer class="text-gray-400 bg-gray-900 body-font">
+        <div
+            class="container px-5 py-24 mx-auto flex md:items-center lg:items-start md:flex-row md:flex-nowrap flex-wrap flex-col">
+            <div class="w-64 flex-shrink-0 md:mx-0 mx-auto text-center md:text-left">
+                <a class="flex title-font font-medium items-center md:justify-start justify-center text-white">
+                    <img alt="blog" src="rue.jpg" class="w-20 h-20 rounded-full flex-shrink-0 object-cover object-center" style="border-radius: 50%;">
+                    <span class="ml-3 text-3xl">Soft Blues</span>
+                </a>
+            </div>
+            <div class="flex-grow flex flex-wrap md:pl-20 -mb-10 md:mt-0 mt-10 md:text-left text-center">
+                <div class="lg:w-1/4 md:w-1/2 w-full px-4">
+                    <h2 class="title-font font-medium text-white tracking-widest text-m mb-3"> Favorites
+                    </h2>
+                    <nav class="list-none mb-10">
+                        <li>
+                            <a class="text-gray-400 hover:text-white text-font"
+                                onclick="showPopup('Neptune')">Neptune</a>
+                        </li>
+                        <li>
+                            <a class="text-gray-400 hover:text-white text-font"
+                                onclick="showPopup('Heart of The Ocean')">Pearl</a>
+                        </li>
+                        <li>
+                            <a class="text-gray-400 hover:text-white text-font"
+                                onclick="showPopup('Secrets')">Secrets</a>
+                        </li>
+                        <li>
+                            <a class="text-gray-400 hover:text-white text-font"
+                                onclick="showPopup('Cornucopia')">Cornucopia</a>
+                        </li>
+                    </nav>
+                </div>
+
+                <!-- Pop-up window -->
+                <div id="popup-overlay" class="popup-overlay">
+                    <div class="popup-content">
+                        <button class="close-btn" onclick="hidePopup()">Close</button>
+                        <h3 id="popup-title"></h3>
+                        <table>
+                            <thead>
+                                <tr class="title-font">
+                                    <th>Customers</th>
+                                    <th>Ratings</th>
+                                </tr>
+                            </thead>
+                            <tbody id="popup-table-body">
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+
+                <script>
+                    const productData = {
+                        'Neptune': [
+                            { feature: 'Diameter', description: '49,244 km' },
+                            { feature: 'Mass', description: '1.024 × 10^26 kg' },
+                            { feature: 'Moons', description: '14' }
+                        ],
+                        'Heart of The Ocean': [
+                            { feature: 'Carat', description: '56 carats' },
+                            { feature: 'Origin', description: 'South Africa' },
+                            { feature: 'Type', description: 'Blue Diamond' }
+                        ],
+                        'Secrets': [
+                            { feature: 'Genre', description: 'Mystery' },
+                            { feature: 'Pages', description: '350' },
+                            { feature: 'Author', description: 'Jane Doe' }
+                        ],
+                        'Cornucopia': [
+                            { feature: 'Symbolism', description: 'Abundance' },
+                            { feature: 'Origin', description: 'Greek Mythology' },
+                            { feature: 'Depiction', description: 'Horn-shaped container' }
+                        ]
+                    };
+
+                    function showPopup(productName) {
+                        document.getElementById('popup-title').textContent = productName;
+                        const tableBody = document.getElementById('popup-table-body');
+                        tableBody.innerHTML = ''; // Clear previous content
+
+                        // Get the rows for the selected product
+                        const rows = productData[productName] || [];
+
+                        rows.forEach(row => {
+                            const tr = document.createElement('tr');
+                            const featureTd = document.createElement('td');
+                            featureTd.textContent = row.feature;
+                            const descriptionTd = document.createElement('td');
+                            descriptionTd.textContent = row.description;
+                            tr.appendChild(featureTd);
+                            tr.appendChild(descriptionTd);
+                            tableBody.appendChild(tr);
+                        });
+
+                        document.getElementById('popup-overlay').style.display = 'block';
+                    }
+
+                    function hidePopup() {
+                        document.getElementById('popup-overlay').style.display = 'none';
+                    }
+                </script>
+
+                <div class="lg:w-1/4 md:w-1/2 w-full px-4">
+                    <h2 class="title-font font-medium text-white tracking-widest text-m mb-3">Rings</h2>
+                    <nav class="list-none mb-10">
+                        <li>
+                            <a class="text-gray-400 hover:text-white text-font">First Link</a>
+                        </li>
+                        <li>
+                            <a class="text-gray-400 hover:text-white text-font">Second Link</a>
+                        </li>
+                        <li>
+                            <a class="text-gray-400 hover:text-white text-font">Third Link</a>
+                        </li>
+                        <li>
+                            <a class="text-gray-400 hover:text-white text-font">Fourth Link</a>
+                        </li>
+                    </nav>
+                </div>
+                <div class="lg:w-1/4 md:w-1/2 w-full px-4">
+                    <h2 class="title-font font-medium text-white tracking-widest text-m mb-3">Necklaces</h2>
+                    <nav class="list-none mb-10">
+                        <li>
+                            <a class="text-gray-400 hover:text-white text-font">First Link</a>
+                        </li>
+                        <li>
+                            <a class="text-gray-400 hover:text-white text-font">Second Link</a>
+                        </li>
+                        <li>
+                            <a class="text-gray-400 hover:text-white text-font">Third Link</a>
+                        </li>
+                        <li>
+                            <a class="text-gray-400 hover:text-white text-font">Fourth Link</a>
+                        </li>
+                    </nav>
+                </div>
+                <div class="lg:w-1/4 md:w-1/2 w-full px-4">
+                    <h2 class="title-font font-medium text-white tracking-widest text-m mb-3">Bracelets</h2>
+                    <nav class="list-none mb-10">
+                        <li>
+                            <a class="text-gray-400 hover:text-white text-font">First Link</a>
+                        </li>
+                        <li>
+                            <a class="text-gray-400 hover:text-white text-font">Second Link</a>
+                        </li>
+                        <li>
+                            <a class="text-gray-400 hover:text-white text-font">Third Link</a>
+                        </li>
+                        <li>
+                            <a class="text-gray-400 hover:text-white text-font">Fourth Link</a>
+                        </li>
+                    </nav>
+                </div>
+            </div>
+        </div>
+        <div class="bg-gray-800 bg-opacity-75">
+            <div class="container mx-auto py-4 px-5 flex flex-wrap flex-col sm:flex-row">
+                <p class="text-gray-400 text-s text-center sm:text-left title-font">© 2024 Soft Blues 
+                 
+                </p>
+                <span class="inline-flex sm:ml-auto sm:mt-0 mt-2 justify-center sm:justify-start">
+                    <a class="text-gray-400">
+                        <svg fill="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                            class="w-5 h-5" viewBox="0 0 24 24">
+                            <path d="M18 2h-3a5 5 0 00-5 5v3H7v4h3v8h4v-8h3l1-4h-4V7a1 1 0 011-1h3z"></path>
+                        </svg>
+                    </a>
+                    <a class="ml-3 text-gray-400">
+                        <svg fill="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                            class="w-5 h-5" viewBox="0 0 24 24">
+                            <path
+                                d="M23 3a10.9 10.9 0 01-3.14 1.53 4.48 4.48 0 00-7.86 3v1A10.66 10.66 0 013 4s-4 9 5 13a11.64 11.64 0 01-7 2c9 5 20 0 20-11.5a4.5 4.5 0 00-.08-.83A7.72 7.72 0 0023 3z">
+                            </path>
+                        </svg>
+                    </a>
+                    <a class="ml-3 text-gray-400">
+                        <svg fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"
+                            stroke-width="2" class="w-5 h-5" viewBox="0 0 24 24">
+                            <rect width="20" height="20" x="2" y="2" rx="5" ry="5"></rect>
+                            <path d="M16 11.37A4 4 0 1112.63 8 4 4 0 0116 11.37zm1.5-4.87h.01"></path>
+                        </svg>
+                    </a>
+                    <a class="ml-3 text-gray-400">
+                        <svg fill="currentColor" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"
+                            stroke-width="0" class="w-5 h-5" viewBox="0 0 24 24">
+                            <path stroke="none"
+                                d="M16 8a6 6 0 016 6v7h-4v-7a2 2 0 00-2-2 2 2 0 00-2 2v7h-4v-7a6 6 0 016-6zM2 9h4v12H2z">
+                            </path>
+                            <circle cx="4" cy="4" r="2" stroke="none"></circle>
+                        </svg>
+                    </a>
+                </span>
+            </div>
+        </div>
+    </footer>
+    </body>
+
+</html>

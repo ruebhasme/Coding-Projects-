@@ -1,0 +1,134 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="preconnect" href="https://fonts.gstatic.com">
+    <link href="https://fonts.googleapis.com/css2?family=Tangerine&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Dancing+Script:wght@400;700&display=swap" rel="stylesheet">
+    <title>Thank You</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            background-image: url('hh.jpg');
+            background-size: cover;
+            /* Cover the entire background */
+            background-position: center;
+            /* Center the background image */
+            overflow: hidden;
+            /* Prevent scrolling */
+        }
+
+        .container {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            animation: fadeIn 1s ease-out;
+            /* Fade in animation */
+        }
+
+        .thank-you-message {
+            text-align: center;
+            color: rgb(247, 250, 252);
+            /* Text color adjusted for better readability */
+        }
+
+        .shop-more {
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            background-color: rgb(247, 250, 252);
+            /* bg-gray-100 */
+            border: 1px solid #d1d5db;
+            /* Adding a light border for a subtle effect */
+            padding: 0.5rem 1rem;
+            /* Adjusted padding */
+            border-radius: 0.375rem;
+            /* rounded */
+            font-size: 1rem;
+            /* text-base */
+            cursor: pointer;
+            text-decoration: none;
+            color: #374151;
+            /* Text color adjusted for better readability */
+            transition: background-color 0.3s, border-color 0.3s;
+            /* Smooth transition for hover effects */
+            animation: slideInRight 1s ease-out;
+            /* Slide in animation */
+        }
+
+        .shop-more:hover {
+            background-color: #e5e7eb;
+            /* Slightly darker background on hover */
+            border-color: #9ca3af;
+            /* Change border color on hover */
+        }
+
+        .shop-more svg {
+            margin-right: 0.5rem;
+            /* Adjusted margin for better spacing */
+            width: 16px;
+            /* Reduced SVG icon size */
+            height: 16px;
+            /* Reduced SVG icon size */
+            vertical-align: middle;
+        }
+
+        .title-font {
+            font-size: 2rem;
+            /* Adjust the font size of the header */
+            margin-bottom: 20px;
+            /* Add space below the header */
+            font-family: 'Tangerine', cursive;
+        }
+
+        .text-font {
+            font-family: 'Dancing Script', cursive;
+
+        }
+
+
+        /* Keyframe animations */
+        @keyframes fadeIn {
+            from {
+                opacity: 0;
+            }
+
+            to {
+                opacity: 1;
+            }
+        }
+
+        @keyframes slideInRight {
+            from {
+                transform: translateX(100%);
+            }
+
+            to {
+                transform: translateX(0);
+            }
+        }
+    </style>
+</head>
+
+<body>
+    <div class="container">
+        <div class="thank-you-message title-font">
+            <label style="font-size: 5rem;">Thank You!</label>
+            <div class="title-font" style="font-size: 3rem;">
+                <p>Your order has been successfully placed.</p>
+            </div>
+        </div>
+    </div>
+
+
+    <a href="index.html" class="shop-more title-font">
+        Shop More
+    </a>
+</body>
+
+</html>

@@ -1,0 +1,120 @@
+body {
+    font-family: Arial, sans-serif;
+    margin: 0;
+    padding: 0;
+    overflow: hidden;
+}
+
+.background-container {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    display: grid;
+    grid-template-columns: repeat(5, 1fr);
+    grid-template-rows: repeat(3, calc(100vh / 3));
+    gap: 0;
+}
+
+.background-image {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    transition: opacity 1s ease-in-out;
+}
+
+.container {
+    position: relative;
+    z-index: 1;
+    max-width: 400px;
+    margin: 50px auto;
+    padding: 20px;
+    background-color: rgb(55, 65, 81);
+    border-radius: 10px;
+    box-shadow: 0 0 20px rgba(0, 0, 0, 0.1);
+    transform: translateY(50px);
+}
+
+h2 {
+    text-align: center;
+    color: #ccc;
+}
+
+form {
+    display: flex;
+    flex-direction: column;
+}
+
+label {
+    margin-bottom: 5px;
+    color: rgb(204, 204, 204);
+}
+
+input {
+    padding: 10px;
+    margin-bottom: 10px;
+    border-radius: 5px;
+    border: 1px solid rgb(204, 204, 204);
+}
+
+.pay-now-btn {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    background-color: #f7fafc;
+    border: 1px solid #d1d5db;
+    padding: 0.5rem 1rem;
+    width: 400px;
+    outline: none;
+    border-radius: 0.375rem;
+    font-size: 1rem;
+    margin-top: 1rem;
+    margin-left: 0.1rem;
+    cursor: pointer;
+    text-decoration: none;
+    color: rgb(55, 65, 81);
+    transition: background-color 0.3s, border-color 0.3s;
+}
+
+.pay-now-btn:hover {
+    background-color: #e5e7eb;
+    border-color: #9ca3af;
+}
+
+.pay-now-btn svg {
+    margin-left: 0.5rem;
+    width: 16px;
+    height: 16px;
+}
+
+#error-message {
+    color: red;
+}
+
+/* Keyframe animations */
+@keyframes slideInUp {
+    from {
+        transform: translateY(50px);
+    }
+    to {
+        transform: translateY(0);
+    }
+}
+
+.container {
+    animation: slideInUp 1s ease-out;
+}
+
+.title-font {
+    font-size: 2rem;
+    /* Adjust the font size of the header */
+    margin-bottom: 10px;
+    /* Add space below the header */
+    font-family: 'Tangerine', cursive;
+}
+
+.text-font {
+    font-family: 'Dancing Script', cursive;
+
+}
